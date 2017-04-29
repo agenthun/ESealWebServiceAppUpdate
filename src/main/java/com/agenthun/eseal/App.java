@@ -10,23 +10,25 @@ import rx.functions.Action1;
  */
 public class App {
     //蓝牙锁
+    private static boolean updateESeal = true;
     private UpdateRequest ESealUpdateRequest = new UpdateRequest(
             Api.UPDATE_APP_TYPE_ESEAL,
-            "5",
-            "1.2.3",
-            "http://www.freight-track.com/files/ESeal_v_1_2_3_2017-02-27.apk",
-            "13430744",
-            "1.支持Google地图\r\n2.增加GPS定位"
+            "7",
+            "1.2.5",
+            "http://www.freight-track.com/files/ESeal_v_1_2_5_2017-04-28.apk",
+            "13451773",
+            "1.修改蓝牙协议上传时间为UTC时间"
     );
 
     //NFC封锁 Lite
+    private static boolean updateESealLite = false;
     private UpdateRequest ESealLiteUpdateRequest = new UpdateRequest(
             Api.UPDATE_APP_TYPE_ESEAL_LITE,
-            "4",
-            "1.0.4",
-            "http://www.freight-track.com/files/ESeal_Lite_v_1_0_4_2017-02-27.apk",
-            "13113066",
-            "1.UI更新\r\n2.支持Google地址逆解析服务"
+            "6",
+            "2.0.0",
+            "http://www.freight-track.com/files/ESeal_Lite_v_2_0_0_2017-03-12.apk",
+            "12626089",
+            "1.全新软件框架\r\n2.解决了一些已知问题"
     );
 
     private Person agenthun = new Person("demodemo", "123456");
@@ -42,13 +44,17 @@ public class App {
         app.requestToken(app.agenthun);
         while (app.getToken() == null) ;
 
-        UpdateRequest request = app.getESealUpdateRequest();
-        request.setToken(app.getToken());
-        app.updateVersion(request, Api.ESeal_UPDATE_SERVICE_URL);
+        if (updateESeal) {
+            UpdateRequest request = app.getESealUpdateRequest();
+            request.setToken(app.getToken());
+            app.updateVersion(request, Api.ESeal_UPDATE_SERVICE_URL);
+        }
 
-        UpdateRequest liteRequest = app.getESealLiteUpdateRequest();
-        liteRequest.setToken(app.getToken());
-        app.updateVersion(liteRequest, Api.ESeal_LITE_UPDATE_SERVICE_URL);
+        if (updateESealLite) {
+            UpdateRequest liteRequest = app.getESealLiteUpdateRequest();
+            liteRequest.setToken(app.getToken());
+            app.updateVersion(liteRequest, Api.ESeal_LITE_UPDATE_SERVICE_URL);
+        }
     }
 
     public String getToken() {
